@@ -9,34 +9,42 @@
 import SpriteKit
 
 class GameScene: SKScene {
+    var hero:Hero!
+    var touchLocation = CGFloat()
+    var gameOver = false
+    
     override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
-        
-        self.addChild(myLabel)
+        addBG()
+        addWhite()
+    }
+    
+    func addBG() {
+        let bg = SKSpriteNode(imageNamed:"bg") // Creates Constant bg
+        addChild(bg)                           // Adds the created bg
+    }
+    
+    func addWhite(){ // Creates the User sprite
+        let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
+        hero = Hero(guy:white)           // Creates a new Hero object called hero
+        addChild(white)                  // Adds the newly created hero
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         for touch in (touches as! Set<UITouch>) {
-            let location = touch.locationInNode(self)
-            
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-            
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
-            
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-            
-            sprite.runAction(SKAction.repeatActionForever(action))
-            
-            self.addChild(sprite)
+            if !gameOver{               // Only if use did not lose
+                touchLocation = (touch.locationInView(self.view!).y * -1) + (self.size.height/2)
+                // Get the location in view for y coordinate  // The size of the screen
+            }
         }
+        
+        let moveAction = SKAction.moveToY(touchLocation, duration: 0.5)  // This makes it move smoothly
+        moveAction.timingMode = SKActionTimingMode.EaseOut               // By easing the movement
+        hero.guy.runAction(moveAction){
+            // Add something here if we want the guy to do something afterwards
+        }
+        
     }
    
     override func update(currentTime: CFTimeInterval) {

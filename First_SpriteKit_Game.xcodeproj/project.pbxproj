@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		B00B8ACD1B360A1B006DBF17 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B8ACC1B360A1B006DBF17 /* AppDelegate.swift */; };
-		B00B8ACF1B360A1B006DBF17 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = B00B8ACE1B360A1B006DBF17 /* GameScene.sks */; };
 		B00B8AD11B360A1B006DBF17 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B8AD01B360A1B006DBF17 /* GameScene.swift */; };
 		B00B8AD31B360A1B006DBF17 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B8AD21B360A1B006DBF17 /* GameViewController.swift */; };
 		B00B8AD61B360A1B006DBF17 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B00B8AD41B360A1B006DBF17 /* Main.storyboard */; };
 		B00B8AD81B360A1C006DBF17 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B00B8AD71B360A1C006DBF17 /* Images.xcassets */; };
 		B00B8ADB1B360A1C006DBF17 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B8AD91B360A1C006DBF17 /* LaunchScreen.xib */; };
 		B00B8AE71B360A1C006DBF17 /* First_SpriteKit_GameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B8AE61B360A1C006DBF17 /* First_SpriteKit_GameTests.swift */; };
+		B0820B821B36574600599315 /* Hero.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0820B811B36574600599315 /* Hero.swift */; };
+		B0820B841B3671CF00599315 /* EnemySprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0820B831B3671CF00599315 /* EnemySprite.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +32,6 @@
 		B00B8AC71B360A1B006DBF17 /* First_SpriteKit_Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = First_SpriteKit_Game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00B8ACB1B360A1B006DBF17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B00B8ACC1B360A1B006DBF17 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		B00B8ACE1B360A1B006DBF17 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		B00B8AD01B360A1B006DBF17 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		B00B8AD21B360A1B006DBF17 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		B00B8AD51B360A1B006DBF17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -40,6 +40,8 @@
 		B00B8AE01B360A1C006DBF17 /* First_SpriteKit_GameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = First_SpriteKit_GameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B00B8AE51B360A1C006DBF17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B00B8AE61B360A1C006DBF17 /* First_SpriteKit_GameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = First_SpriteKit_GameTests.swift; sourceTree = "<group>"; };
+		B0820B811B36574600599315 /* Hero.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hero.swift; sourceTree = "<group>"; };
+		B0820B831B3671CF00599315 /* EnemySprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemySprite.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,8 +84,9 @@
 			isa = PBXGroup;
 			children = (
 				B00B8ACC1B360A1B006DBF17 /* AppDelegate.swift */,
-				B00B8ACE1B360A1B006DBF17 /* GameScene.sks */,
 				B00B8AD01B360A1B006DBF17 /* GameScene.swift */,
+				B0820B831B3671CF00599315 /* EnemySprite.swift */,
+				B0820B811B36574600599315 /* Hero.swift */,
 				B00B8AD21B360A1B006DBF17 /* GameViewController.swift */,
 				B00B8AD41B360A1B006DBF17 /* Main.storyboard */,
 				B00B8AD71B360A1C006DBF17 /* Images.xcassets */,
@@ -200,7 +203,6 @@
 			files = (
 				B00B8ADB1B360A1C006DBF17 /* LaunchScreen.xib in Resources */,
 				B00B8AD81B360A1C006DBF17 /* Images.xcassets in Resources */,
-				B00B8ACF1B360A1B006DBF17 /* GameScene.sks in Resources */,
 				B00B8AD61B360A1B006DBF17 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -220,8 +222,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B00B8AD11B360A1B006DBF17 /* GameScene.swift in Sources */,
+				B0820B841B3671CF00599315 /* EnemySprite.swift in Sources */,
 				B00B8AD31B360A1B006DBF17 /* GameViewController.swift in Sources */,
 				B00B8ACD1B360A1B006DBF17 /* AppDelegate.swift in Sources */,
+				B0820B821B36574600599315 /* Hero.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,6 +357,7 @@
 				INFOPLIST_FILE = First_SpriteKit_Game/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -363,6 +368,7 @@
 				INFOPLIST_FILE = First_SpriteKit_Game/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -419,6 +425,7 @@
 				B00B8AEC1B360A1C006DBF17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B00B8AED1B360A1C006DBF17 /* Build configuration list for PBXNativeTarget "First_SpriteKit_GameTests" */ = {
 			isa = XCConfigurationList;
@@ -427,6 +434,7 @@
 				B00B8AEF1B360A1C006DBF17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -8,14 +8,43 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     var hero:Hero!
     var touchLocation = CGFloat()
     var gameOver = false
+    var enemySprites:[EnemySprite] = []
+    var endOfScreenRight = CGFloat()
+    var endOfScreenLeft = CGFloat()
+    var score = 0
+    var scoreLabel = SKLabelNode()
+    var timer = NSTimer()
+    var countDownText = SKLabelNode(text: "5")
+    var countDown = 5
+    
+    enum ColliderType:UInt32{
+        case Hero = 1
+        case EnemySprite = 2
+    }
     
     override func didMoveToView(view: SKView) {
+        self.physicsWorld.contactDelegate = self
+        endOfScreenLeft = (self.size.width / 2 ) * CGFloat(-1)
+        endOfScreenRight =  self.size.width / 2
+        
         addBG()
         addWhite()
+        addEnemies()
+        scoreLabel = SKLabelNode(text: "0")
+        scoreLabel.position.y = -(self.size.height/4)
+        addChild(scoreLabel)
+        addChild(countDownText)
+        countDownText.hidden = true
+    }
+    
+    func didBeginContact(contact: SKPhysicsContact) {
+        hero.emit = true
+        gameOver = true
+        println("Collided")
     }
     
     func addBG() {
@@ -25,8 +54,44 @@ class GameScene: SKScene {
     
     func addWhite(){ // Creates the User sprite
         let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
-        hero = Hero(guy:white)           // Creates a new Hero object called hero
+        white.physicsBody = SKPhysicsBody(circleOfRadius: white.size.width/2)
+        white.physicsBody!.affectedByGravity = false
+        white.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
+        white.physicsBody!.contactTestBitMask = ColliderType.EnemySprite.rawValue
+        white.physicsBody!.collisionBitMask = ColliderType.EnemySprite.rawValue
+        let heroParticles = SKEmitterNode(fileNamed: "HitParticle.sks")
+        heroParticles.hidden = true
+        hero = Hero(guy:white, particles: heroParticles)// Creates a new Hero object called hero
+        white.addChild(heroParticles)
         addChild(white)                  // Adds the newly created hero
+    }
+    
+    func addEnemies(){
+        addEnemy(named: "red", speed: 1, yPos: self.size.height / 4)
+        addEnemy(named: "yellow", speed: 1.5, yPos: 0)
+        addEnemy(named: "blue", speed: 3, yPos: -self.size.height / 4)
+    }
+    
+    func addEnemy(#named:String, speed:Float, yPos:CGFloat){
+        var enemySpriteNode = SKSpriteNode(imageNamed: named)
+        
+        enemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: enemySpriteNode.size.width/2)
+        enemySpriteNode.physicsBody!.affectedByGravity = false
+        enemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
+        enemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
+        
+        var enemySprite = EnemySprite(speed: speed, guy: enemySpriteNode)
+        enemySprites.append(enemySprite)
+        resetEnemySprite(enemySpriteNode, yPos: yPos)
+        enemySprite.yPos = enemySpriteNode.position.y
+        addChild(enemySpriteNode)
+        
+    }
+    
+    func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
+        enemySpriteNode.position.x = endOfScreenRight
+        enemySpriteNode.position.y = yPos
+        
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -49,5 +114,52 @@ class GameScene: SKScene {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        if !gameOver{
+            updateEnemySpritePositions()
+        }
+        updateHeroEmitter()
+    }
+    
+    func updateHeroEmitter(){
+        if hero.emit && hero.emitFrameCount < hero.maxEmitFrameCount{
+            hero.emitFrameCount++
+            hero.particles.hidden = false
+        }
+        else{
+            hero.emit = false
+            hero.particles.hidden = true
+            hero.emitFrameCount = 0
+        }
+    }
+    
+    func updateEnemySpritePositions(){
+        for enemySprite in enemySprites {
+            if !enemySprite.moving{
+                enemySprite.currentFrame++
+                if enemySprite.currentFrame > enemySprite.randomFrame{
+                    enemySprite.moving = true
+                }
+            }
+            else{
+                enemySprite.guy.position.y = CGFloat(Double(enemySprite.guy.position.y) + sin(enemySprite.angle) * enemySprite.range)
+                enemySprite.angle += hero.speed
+                if enemySprite.guy.position.x > endOfScreenLeft {
+                    
+                    enemySprite.guy.position.x -= CGFloat(enemySprite.speed)
+                }
+                else{
+                    enemySprite.guy.position.x = endOfScreenRight
+                    enemySprite.currentFrame = 0
+                    enemySprite.setRandomFrame()
+                    enemySprite.moving = false
+                    enemySprite.range += 0.1
+                    updateScore()
+                }
+            }
+        }
+    }
+    func updateScore(){
+        score++
+        scoreLabel.text = String(score)
     }
 }

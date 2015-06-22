@@ -16,6 +16,8 @@
 		B00B8AE71B360A1C006DBF17 /* First_SpriteKit_GameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B8AE61B360A1C006DBF17 /* First_SpriteKit_GameTests.swift */; };
 		B0820B821B36574600599315 /* Hero.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0820B811B36574600599315 /* Hero.swift */; };
 		B0820B841B3671CF00599315 /* EnemySprite.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0820B831B3671CF00599315 /* EnemySprite.swift */; };
+		B0820B871B37B6A000599315 /* HitParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = B0820B851B37B6A000599315 /* HitParticle.sks */; };
+		B0820B881B37B6A000599315 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = B0820B861B37B6A000599315 /* spark.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		B00B8AE61B360A1C006DBF17 /* First_SpriteKit_GameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = First_SpriteKit_GameTests.swift; sourceTree = "<group>"; };
 		B0820B811B36574600599315 /* Hero.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hero.swift; sourceTree = "<group>"; };
 		B0820B831B3671CF00599315 /* EnemySprite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnemySprite.swift; sourceTree = "<group>"; };
+		B0820B851B37B6A000599315 /* HitParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HitParticle.sks; sourceTree = "<group>"; };
+		B0820B861B37B6A000599315 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,8 @@
 			children = (
 				B00B8ACC1B360A1B006DBF17 /* AppDelegate.swift */,
 				B00B8AD01B360A1B006DBF17 /* GameScene.swift */,
+				B0820B851B37B6A000599315 /* HitParticle.sks */,
+				B0820B861B37B6A000599315 /* spark.png */,
 				B0820B831B3671CF00599315 /* EnemySprite.swift */,
 				B0820B811B36574600599315 /* Hero.swift */,
 				B00B8AD21B360A1B006DBF17 /* GameViewController.swift */,
@@ -201,9 +207,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0820B881B37B6A000599315 /* spark.png in Resources */,
 				B00B8ADB1B360A1C006DBF17 /* LaunchScreen.xib in Resources */,
 				B00B8AD81B360A1C006DBF17 /* Images.xcassets in Resources */,
 				B00B8AD61B360A1B006DBF17 /* Main.storyboard in Resources */,
+				B0820B871B37B6A000599315 /* HitParticle.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

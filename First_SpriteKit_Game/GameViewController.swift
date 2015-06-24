@@ -13,7 +13,6 @@ class GameViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
         let scene = GameScene()
         
@@ -31,9 +30,8 @@ class GameViewController: UIViewController {
         scene.size = skView.bounds.size // set scene size the same as the size of current container
         
         
-        
         skView.presentScene(scene)
-        
+
     }
 
     override func shouldAutorotate() -> Bool {

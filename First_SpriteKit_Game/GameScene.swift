@@ -17,6 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var endOfScreenLeft = CGFloat()
     var score = 0
     var scoreLabel = SKLabelNode()
+    var reset = SKSpriteNode(imageNamed: "reset")
     var timer = NSTimer()
     var countDownText = SKLabelNode(text: "5")
     var countDown = 5
@@ -38,13 +39,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.position.y = -(self.size.height/4)
         addChild(scoreLabel)
         addChild(countDownText)
+        addChild(reset)
         countDownText.hidden = true
+        reset.name = "reset"
+        reset.hidden = true
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
         hero.emit = true
         gameOver = true
+        reset.hidden = false
         println("Collided")
+    }
+    
+    func restartGame(){
+        countDownText.hidden = false
+        hero.guy.position.y=0
+        hero.guy.position.x=0
+        reset.hidden = true
+        score = 0
+        scoreLabel.text = "0"
+        for enemySprite in enemySprites {
+            resetEnemySprite(enemySprite.guy, yPos: enemySprite.yPos)
+        }
+        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
+    }
+    
+    func updateTimer() {
+        if countDown > 0 {
+            countDown--
+            countDownText.text = String(countDown)
+        }
+        else {
+            countDown = 5
+            countDownText.text = String(countDown)
+            countDownText.hidden = true
+            gameOver = false
+            timer.invalidate()
+        }
     }
     
     func addBG() {
@@ -101,6 +133,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if !gameOver{               // Only if use did not lose
                 touchLocation = (touch.locationInView(self.view!).y * -1) + (self.size.height/2)
                 // Get the location in view for y coordinate  // The size of the screen
+            }
+            else {
+                let location = touch.locationInNode(self)
+                var sprites = nodesAtPoint((location))
+                for sprite in sprites {
+                    if let spriteNode = sprite as? SKSpriteNode{
+                        if spriteNode.name != nil{
+                            if spriteNode.name == "reset"{
+                                restartGame()
+                            }
+                        }
+                    }
+                }
             }
         }
         

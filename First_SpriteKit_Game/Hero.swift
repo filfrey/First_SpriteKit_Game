@@ -17,6 +17,8 @@ class Hero{ // Needs a initalizer in order to work
     var emitFrameCount = 0
     var maxEmitFrameCount = 30
     var particles:SKEmitterNode
+    // Mine
+    
     
     init(guy:SKSpriteNode, particles:SKEmitterNode){
         self.guy = guy

@@ -95,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         heroParticles.hidden = true
         hero = Hero(guy:white, particles: heroParticles)// Creates a new Hero object called hero
         white.addChild(heroParticles)
-        addChild(white)                  // Adds the newly created hero
+        addChild(white)                     // Adds the newly created hero
     }
     
     func addEnemies(){
@@ -123,6 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
         enemySpriteNode.position.x = endOfScreenRight
         enemySpriteNode.position.y = yPos
+        println("reset x and Y position for sprite")
         
     }
     
@@ -140,7 +141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 for sprite in sprites {
                     if let spriteNode = sprite as? SKSpriteNode{
                         if spriteNode.name != nil{
-                            if spriteNode.name == "reset"{
+                            if (spriteNode.name == "reset" && !reset.hidden){
                                 restartGame()
                             }
                         }
@@ -154,7 +155,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero.guy.runAction(moveAction){
             // Add something here if we want the guy to do something afterwards
         }
-        
     }
    
     override func update(currentTime: CFTimeInterval) {

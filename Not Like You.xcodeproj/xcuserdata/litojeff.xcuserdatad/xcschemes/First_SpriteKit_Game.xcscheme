@@ -17,7 +17,7 @@
                BlueprintIdentifier = "B00B8AC61B360A1B006DBF17"
                BuildableName = "First_SpriteKit_Game.app"
                BlueprintName = "First_SpriteKit_Game"
-               ReferencedContainer = "container:First_SpriteKit_Game.xcodeproj">
+               ReferencedContainer = "container:Not Like You.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "B00B8ADF1B360A1C006DBF17"
                BuildableName = "First_SpriteKit_GameTests.xctest"
                BlueprintName = "First_SpriteKit_GameTests"
-               ReferencedContainer = "container:First_SpriteKit_Game.xcodeproj">
+               ReferencedContainer = "container:Not Like You.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "B00B8ADF1B360A1C006DBF17"
                BuildableName = "First_SpriteKit_GameTests.xctest"
                BlueprintName = "First_SpriteKit_GameTests"
-               ReferencedContainer = "container:First_SpriteKit_Game.xcodeproj">
+               ReferencedContainer = "container:Not Like You.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -59,7 +59,7 @@
             BlueprintIdentifier = "B00B8AC61B360A1B006DBF17"
             BuildableName = "First_SpriteKit_Game.app"
             BlueprintName = "First_SpriteKit_Game"
-            ReferencedContainer = "container:First_SpriteKit_Game.xcodeproj">
+            ReferencedContainer = "container:Not Like You.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -79,7 +79,7 @@
             BlueprintIdentifier = "B00B8AC61B360A1B006DBF17"
             BuildableName = "First_SpriteKit_Game.app"
             BlueprintName = "First_SpriteKit_Game"
-            ReferencedContainer = "container:First_SpriteKit_Game.xcodeproj">
+            ReferencedContainer = "container:Not Like You.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -98,7 +98,7 @@
             BlueprintIdentifier = "B00B8AC61B360A1B006DBF17"
             BuildableName = "First_SpriteKit_Game.app"
             BlueprintName = "First_SpriteKit_Game"
-            ReferencedContainer = "container:First_SpriteKit_Game.xcodeproj">
+            ReferencedContainer = "container:Not Like You.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -10,7 +10,7 @@ import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var hero:Hero!
-    var touchLocation = CGFloat()
+    var touchLocation = CGPoint()
     var gameOver = false
     var enemySprites:[EnemySprite] = []
     var endOfScreenRight = CGFloat()
@@ -21,6 +21,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timer = NSTimer()
     var countDownText = SKLabelNode(text: "5")
     var countDown = 5
+    let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
     
     enum ColliderType:UInt32{
         case Hero = 1
@@ -43,6 +44,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         countDownText.hidden = true
         reset.name = "reset"
         reset.hidden = true
+        println("Init View")
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
@@ -54,15 +56,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func restartGame(){
         countDownText.hidden = false
-        hero.guy.position.y=0
-        hero.guy.position.x=0
         reset.hidden = true
         score = 0
         scoreLabel.text = "0"
         for enemySprite in enemySprites {
             resetEnemySprite(enemySprite.guy, yPos: enemySprite.yPos)
         }
+        var origin = CGPoint(x: 0, y: 0)
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
+
+        hero.guy.position.y=0
+        hero.guy.position.x=0
+        hero.guy.removeAllActions()
+        println("Restarting Game")
     }
     
     func updateTimer() {
@@ -85,7 +91,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func addWhite(){ // Creates the User sprite
-        let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
+        
         white.physicsBody = SKPhysicsBody(circleOfRadius: white.size.width/2)
         white.physicsBody!.affectedByGravity = false
         white.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
@@ -96,6 +102,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero = Hero(guy:white, particles: heroParticles)// Creates a new Hero object called hero
         white.addChild(heroParticles)
         addChild(white)                     // Adds the newly created hero
+        println("Add White")
     }
     
     func addEnemies(){
@@ -117,7 +124,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         resetEnemySprite(enemySpriteNode, yPos: yPos)
         enemySprite.yPos = enemySpriteNode.position.y
         addChild(enemySpriteNode)
-        
+        print("Adding Enemies")
     }
     
     func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
@@ -132,8 +139,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for touch in (touches as! Set<UITouch>) {
             if !gameOver{               // Only if use did not lose
-                touchLocation = (touch.locationInView(self.view!).y * -1) + (self.size.height/2)
+                //touchLocation = (touch.locationInView(self.view!).y * -1) + (self.size.height/2)
                 // Get the location in view for y coordinate  // The size of the screen
+                touchLocation = CGPoint(
+                    x:(touch.locationInView(self.view!).x) - (self.size.width/2),
+                    y:(touch.locationInView(self.view!).y * -1) + (self.size.height/2)
+                    )
             }
             else {
                 let location = touch.locationInNode(self)
@@ -150,11 +161,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        let moveAction = SKAction.moveToY(touchLocation, duration: 0.5)  // This makes it move smoothly
-        moveAction.timingMode = SKActionTimingMode.EaseOut               // By easing the movement
+        //let moveActionY = SKAction.moveToY(touchLocation, duration: 0.5)  // This makes it move smoothly
+        //let moveActionX = SKAction.moveToX(touchLocation, duration: 0.5)
+        let moveAction = SKAction.moveTo(touchLocation, duration: 0.5)
+        //moveActionY.timingMode = SKActionTimingMode.EaseOut               // By easing the movement
+        //moveActionX.timingMode = SKActionTimingMode.EaseOut
+        if !gameOver{
         hero.guy.runAction(moveAction){
             // Add something here if we want the guy to do something afterwards
-        }
+            }}
+        //hero.guy.runAction(moveActionY){}
     }
    
     override func update(currentTime: CFTimeInterval) {

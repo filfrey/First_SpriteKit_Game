@@ -179,6 +179,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if !gameOver{
             for  index = 0; index < enemySprites.count; ++index {
                 if enemySprites[index].guy.position.x < endOfScreenLeft {
+                    enemySprites[index].guy.removeAllChildren()
+                    enemySprites[index].guy.removeFromParent()
                     enemySprites.removeAtIndex(index)
                     print("DEAD")
                 }

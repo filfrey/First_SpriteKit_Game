@@ -35,7 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         addBG()
         addWhite()
-        addEnemies()
+        //6-26 addEnemies()
         scoreLabel = SKLabelNode(text: "0")
         scoreLabel.position.y = -(self.size.height/4)
         addChild(scoreLabel)
@@ -105,10 +105,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         println("Add White")
     }
     
-    func addEnemies(){
-        addEnemy(named: "red", speed: 1, yPos: self.size.height / 4)
-        addEnemy(named: "yellow", speed: 1.5, yPos: 0)
+    /*func addEnemies(){
         addEnemy(named: "blue", speed: 3, yPos: -self.size.height / 4)
+        addNewEnemy("red")
     }
     
     func addEnemy(#named:String, speed:Float, yPos:CGFloat){
@@ -119,12 +118,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         enemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
         enemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
         
+        //var enemySprite = EnemySprite(speed: speed,guy: enemySpriteNode)
         var enemySprite = EnemySprite(speed: speed, guy: enemySpriteNode)
         enemySprites.append(enemySprite)
         resetEnemySprite(enemySpriteNode, yPos: yPos)
         enemySprite.yPos = enemySpriteNode.position.y
         addChild(enemySpriteNode)
         print("Adding Enemies")
+    }*/
+    func addNewEnemy(type : String){
+        
+        var wavyEnemySpriteNode = SKSpriteNode(imageNamed: type)
+        
+        wavyEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: wavyEnemySpriteNode.size.width/2)
+        wavyEnemySpriteNode.physicsBody!.affectedByGravity = false
+        wavyEnemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
+        wavyEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
+        
+        var wavyEnemySprite = WavyEnemy(guy: wavyEnemySpriteNode)
+        enemySprites.append(wavyEnemySprite)
+        wavyEnemySpriteNode.position.x = endOfScreenRight//removed later
+        addChild(wavyEnemySpriteNode)
+        
     }
     
     func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
@@ -161,31 +176,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        //let moveActionY = SKAction.moveToY(touchLocation, duration: 0.5)  // This makes it move smoothly
-        //let moveActionX = SKAction.moveToX(touchLocation, duration: 0.5)
+        // This makes it move smoothly
         let moveAction = SKAction.moveTo(touchLocation, duration: 0.5)
-        //moveActionY.timingMode = SKActionTimingMode.EaseOut               // By easing the movement
-        //moveActionX.timingMode = SKActionTimingMode.EaseOut
         if !gameOver{
-        hero.guy.runAction(moveAction){
-            // Add something here if we want the guy to do something afterwards
-            }}
-        //hero.guy.runAction(moveActionY){}
+            hero.guy.runAction(moveAction){}
+        }
     }
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         var index = 0
         if !gameOver{
+            if (enemySprites.count < 3){
+                addNewEnemy("green")
+                addNewEnemy("gray")
+                println("Adding New Enemy")
+            }
             for  index = 0; index < enemySprites.count; ++index {
                 if enemySprites[index].guy.position.x < endOfScreenLeft {
                     enemySprites[index].guy.removeAllChildren()
                     enemySprites[index].guy.removeFromParent()
                     enemySprites.removeAtIndex(index)
+                    updateScore()
                     print("DEAD")
                 }
                 else{
-                    print("ALIVE")
                     enemySprites[index].motion()
                 }
             }
@@ -204,34 +219,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hero.emitFrameCount = 0
         }
     }
-    /*
-    func updateEnemySpritePositions(){
-        for enemySprite in enemySprites {
-            if !enemySprite.moving{
-                enemySprite.currentFrame++
-                if enemySprite.currentFrame > enemySprite.randomFrame{
-                    
-                }
-            }
-            else{
-                enemySprite.guy.position.y = CGFloat(Double(enemySprite.guy.position.y) + sin(enemySprite.angle) * enemySprite.range)
-                enemySprite.angle += hero.speed
-                if enemySprite.guy.position.x > endOfScreenLeft {
-                    
-                    enemySprite.guy.position.x -= CGFloat(enemySprite.speed)
-                }
-                else{
-                    enemySprite.guy.position.x = endOfScreenRight
-                    enemySprite.currentFrame = 0
-                    enemySprite.setRandomFrame()
-                    enemySprite.moving = false
-                    enemySprite.range += 0.1
-                    updateScore()
-                }
-            }
-        }
-    }
-    */
+    
     func updateScore(){
         score++
         scoreLabel.text = String(score)

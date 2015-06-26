@@ -31,7 +31,6 @@ class EnemySprite{
         self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
     }
     func motion(){
-        println("MOTION BEING CALLED")
         if self.moving{
             self.guy.position.y = CGFloat(Double(self.guy.position.y) + sin(self.angle) * self.range)
             self.angle += 0.1

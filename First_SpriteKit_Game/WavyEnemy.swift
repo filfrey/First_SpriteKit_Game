@@ -10,10 +10,11 @@ import Foundation
 import SpriteKit
 
 class WavyEnemy : EnemySprite{
-
-    init(speed: Float, guy : SKSpriteNode, type : String) {
+    
+    init(guy : SKSpriteNode) {
         let type = "wavy"
-        super.init(speed: speed, guy: guy)
+        super.init(speed: 1,guy: guy)
+        yPos = 0
         self.motion()
     }
     
@@ -32,7 +33,9 @@ class WavyEnemy : EnemySprite{
         }
         
     }
-
-
+    
+    func setYPos(newYPos : CGFloat){
+        yPos = newYPos
+    }
     
 }

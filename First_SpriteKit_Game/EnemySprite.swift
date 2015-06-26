@@ -23,14 +23,25 @@ class EnemySprite{
         self.speed = speed
         self.guy = guy
         self.setRandomFrame()
+        self.motion()
     }
     
     func setRandomFrame(){
         var range = UInt32(50)..<UInt32(200)
         self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
     }
-    func setLine(){
-        var range = UInt32(50)..<UInt32(200)
-        self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
+    func motion(){
+        println("MOTION BEING CALLED")
+        if self.moving{
+            self.guy.position.y = CGFloat(Double(self.guy.position.y) + sin(self.angle) * self.range)
+            self.angle += 0.1
+            self.guy.position.x -= CGFloat(self.speed)
+        }
+        else{
+            self.currentFrame++
+            if self.currentFrame > self.randomFrame{
+                self.moving = true
+            }
+        }
     }
 }

@@ -175,8 +175,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        var index = 0
         if !gameOver{
-            updateEnemySpritePositions()
+            for  index = 0; index < enemySprites.count; ++index {
+                if enemySprites[index].guy.position.x < endOfScreenLeft {
+                    enemySprites.removeAtIndex(index)
+                    print("DEAD")
+                }
+                else{
+                    print("ALIVE")
+                    enemySprites[index].motion()
+                }
+            }
         }
         updateHeroEmitter()
     }
@@ -192,13 +202,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hero.emitFrameCount = 0
         }
     }
-    
+    /*
     func updateEnemySpritePositions(){
         for enemySprite in enemySprites {
             if !enemySprite.moving{
                 enemySprite.currentFrame++
                 if enemySprite.currentFrame > enemySprite.randomFrame{
-                    enemySprite.moving = true
+                    
                 }
             }
             else{
@@ -219,6 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    */
     func updateScore(){
         score++
         scoreLabel.text = String(score)

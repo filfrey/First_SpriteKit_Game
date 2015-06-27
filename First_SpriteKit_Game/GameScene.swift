@@ -1,6 +1,6 @@
 //
 //  GameScene.swift
-//  First_SpriteKit_Game
+//  Not Like You
 //
 //  Created by Jeffrey Lin on 6/20/15.
 //  Copyright (c) 2015 Jeffrey Lin. All rights reserved.
@@ -44,14 +44,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         countDownText.hidden = true
         reset.name = "reset"
         reset.hidden = true
-        println("Init View")
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
         hero.emit = true
         gameOver = true
         reset.hidden = false
-        println("Collided")
     }
     
     func restartGame(){
@@ -59,8 +57,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         reset.hidden = true
         score = 0
         scoreLabel.text = "0"
-        for enemySprite in enemySprites {
-            resetEnemySprite(enemySprite.guy, yPos: enemySprite.yPos)
+        var int = 0
+        while !enemySprites.isEmpty {
+            enemySprites.last?.guy.removeFromParent()
+            enemySprites.removeLast()
         }
         var origin = CGPoint(x: 0, y: 0)
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
@@ -105,57 +105,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         println("Add White")
     }
     
-    /*func addEnemies(){
-        addEnemy(named: "blue", speed: 3, yPos: -self.size.height / 4)
-        addNewEnemy("red")
-    }
-    
-    func addEnemy(#named:String, speed:Float, yPos:CGFloat){
-        var enemySpriteNode = SKSpriteNode(imageNamed: named)
-        
-        enemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: enemySpriteNode.size.width/2)
-        enemySpriteNode.physicsBody!.affectedByGravity = false
-        enemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
-        enemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-        
-        //var enemySprite = EnemySprite(speed: speed,guy: enemySpriteNode)
-        var enemySprite = EnemySprite(speed: speed, guy: enemySpriteNode)
-        enemySprites.append(enemySprite)
-        resetEnemySprite(enemySpriteNode, yPos: yPos)
-        enemySprite.yPos = enemySpriteNode.position.y
-        addChild(enemySpriteNode)
-        print("Adding Enemies")
-    }*/
     func addNewEnemy(type : String){
-        
-        var wavyEnemySpriteNode = SKSpriteNode(imageNamed: type)
-        
-        wavyEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: wavyEnemySpriteNode.size.width/2)
-        wavyEnemySpriteNode.physicsBody!.affectedByGravity = false
-        wavyEnemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
-        wavyEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-        
-        var wavyEnemySprite = WavyEnemy(guy: wavyEnemySpriteNode)
+
+        var wavyEnemySprite = WavyEnemy(screen : self.size.width / 2)
         enemySprites.append(wavyEnemySprite)
-        wavyEnemySpriteNode.position.x = endOfScreenRight//removed later
-        addChild(wavyEnemySpriteNode)
-        
+
+        addChild(wavyEnemySprite.getSpriteNode())
     }
     
-    func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
+    /*func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
         enemySpriteNode.position.x = endOfScreenRight
         enemySpriteNode.position.y = yPos
         println("reset x and Y position for sprite")
-        
-    }
+    }*/
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         for touch in (touches as! Set<UITouch>) {
-            if !gameOver{               // Only if use did not lose
-                //touchLocation = (touch.locationInView(self.view!).y * -1) + (self.size.height/2)
-                // Get the location in view for y coordinate  // The size of the screen
+            if !gameOver{
                 touchLocation = CGPoint(
                     x:(touch.locationInView(self.view!).x) - (self.size.width/2),
                     y:(touch.locationInView(self.view!).y * -1) + (self.size.height/2)
@@ -166,10 +134,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 var sprites = nodesAtPoint((location))
                 for sprite in sprites {
                     if let spriteNode = sprite as? SKSpriteNode{
-                        if spriteNode.name != nil{
-                            if (spriteNode.name == "reset" && !reset.hidden){
-                                restartGame()
-                            }
+                        if spriteNode.name == "reset" && !reset.hidden{
+                            restartGame()
                         }
                     }
                 }
@@ -188,9 +154,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var index = 0
         if !gameOver{
             if (enemySprites.count < 3){
-                addNewEnemy("green")
                 addNewEnemy("gray")
-                println("Adding New Enemy")
             }
             for  index = 0; index < enemySprites.count; ++index {
                 if enemySprites[index].guy.position.x < endOfScreenLeft {

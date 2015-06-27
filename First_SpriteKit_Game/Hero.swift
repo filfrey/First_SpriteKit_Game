@@ -17,11 +17,12 @@ class Hero{ // Needs a initalizer in order to work
     var emitFrameCount = 0
     var maxEmitFrameCount = 30
     var particles:SKEmitterNode
-    // Mine
+    // Have to eventually add the creation of hero her instead of Game Scene
     
     
     init(guy:SKSpriteNode, particles:SKEmitterNode){
         self.guy = guy
         self.particles = particles
     }
+    
 }

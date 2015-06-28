@@ -10,8 +10,8 @@ import Foundation
 import SpriteKit
 
 class WavyEnemy : EnemySprite{
-    var newSpeed = 1 + Float(arc4random_uniform(2))
-    var newYPos = CGFloat(arc4random_uniform(10000)) - 5000
+    var newSpeed = 5 + Float(arc4random_uniform(4))
+    var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var wavyEnemySpriteNode = SKSpriteNode(imageNamed: "gray")
     
     init(screen : CGFloat) {
@@ -25,10 +25,11 @@ class WavyEnemy : EnemySprite{
         wavyEnemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
         wavyEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
         wavyEnemySpriteNode.position.x = screen
+        wavyEnemySpriteNode.position.y = newYPos
         self.motion()
     }
     
-    func getSpriteNode()->SKSpriteNode{
+    override func getSpriteNode()->SKSpriteNode{
         return wavyEnemySpriteNode
     }
         

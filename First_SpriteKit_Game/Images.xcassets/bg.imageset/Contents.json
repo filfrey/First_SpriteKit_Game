@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "bg_small.png"
+      "filename" : "Cloudy_BG_Small.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "bg.png"
+      "filename" : "Cloudy_BG_Large.png"
     },
     {
       "idiom" : "universal",

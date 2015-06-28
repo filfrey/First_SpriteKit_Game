@@ -10,19 +10,31 @@ import Foundation
 import SpriteKit
 
 class LineEnemy : EnemySprite{
-    var newSpeed = 2 + Float(arc4random_uniform(1))
-    var newYPos = CGFloat(arc4random_uniform(10000)) - 5000
-    init(guy : SKSpriteNode) {
+    var newSpeed = 5 + Float(arc4random_uniform(4))
+    var newYPos = CGFloat(arc4random_uniform(300)) - 150
+    var lineEnemySpriteNode = SKSpriteNode(imageNamed: "green")
+    init(screen : CGFloat) {
         let type = "wavy"
-        super.init(speed: newSpeed,guy: guy)
+        super.init(speed: newSpeed,guy: lineEnemySpriteNode)
         yPos = newYPos
+        lineEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: lineEnemySpriteNode.size.width/2)
+        lineEnemySpriteNode.physicsBody!.affectedByGravity = false
+        lineEnemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
+        lineEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
+        lineEnemySpriteNode.position.x = screen
+        lineEnemySpriteNode.position.y = newYPos
+        println(self.guy.position.y)
+        println(newYPos)
         self.motion()
+    }
+    
+    override func getSpriteNode()->SKSpriteNode{
+        return lineEnemySpriteNode
     }
     
     override func motion(){
         if self.moving{
-            self.guy.position.y -= CGFloat(self.guy.position.y)
-            self.guy.position.x -= CGFloat(self.speed)
+            lineEnemySpriteNode.position.x -= CGFloat(self.speed)
         }
         else{
             self.currentFrame++

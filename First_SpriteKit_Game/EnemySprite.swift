@@ -30,8 +30,12 @@ class EnemySprite{
     }
     
     func setRandomFrame(){
-        var range = UInt32(50)..<UInt32(200)
+        var range = UInt32(0)..<UInt32(100)
         self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
     }
+    
     func motion(){}
+    func getSpriteNode()->SKSpriteNode{
+        return guy
+    }
 }

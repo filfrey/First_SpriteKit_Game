@@ -38,6 +38,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //6-26 addEnemies()
         scoreLabel = SKLabelNode(text: "0")
         scoreLabel.position.y = -(self.size.height/4)
+        countDownText.position.y += 20
         addChild(scoreLabel)
         addChild(countDownText)
         addChild(reset)
@@ -106,11 +107,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func addNewEnemy(type : String){
+        var newEnemySprite : EnemySprite
+        if arc4random_uniform(2) == 1{
+            newEnemySprite = WavyEnemy(screen : self.size.width / 2)
+        }
+        else{
+            newEnemySprite = LineEnemy(screen : self.size.width / 2)
+        }
+        enemySprites.append(newEnemySprite)
 
-        var wavyEnemySprite = WavyEnemy(screen : self.size.width / 2)
-        enemySprites.append(wavyEnemySprite)
-
-        addChild(wavyEnemySprite.getSpriteNode())
+        addChild(newEnemySprite.getSpriteNode())
+        
     }
     
     /*func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
@@ -153,7 +160,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Called before each frame is rendered */
         var index = 0
         if !gameOver{
-            if (enemySprites.count < 3){
+            if (enemySprites.count < 5){
+                addNewEnemy("gray")
+            }
+            if (arc4random_uniform(500) == 1 && enemySprites.count < 7){
                 addNewEnemy("gray")
             }
             for  index = 0; index < enemySprites.count; ++index {

@@ -12,35 +12,46 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var hero:Hero!
     var touchLocation = CGPoint()
     var gameOver = false
-    var enemySprites:[EnemySprite] = []
+    var enemySprites:[Sprite] = []
     var endOfScreenRight = CGFloat()
     var endOfScreenLeft = CGFloat()
+    var endOfScreenTop = CGFloat()
+    var endOfScreenBottom = CGFloat()
     var score = 0
     var scoreLabel = SKLabelNode()
     var reset = SKSpriteNode(imageNamed: "reset")
     var timer = NSTimer()
     var countDownText = SKLabelNode(text: "5")
     var countDown = 5
+    var money = 0
+    var moneyText = SKLabelNode(text: "Money: ")
     let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
     
+    
     enum ColliderType:UInt32{
-        case Hero = 1
+        case Hero        = 1
         case EnemySprite = 2
+        case PowerUps    = 3
     }
     
     override func didMoveToView(view: SKView) {
         self.physicsWorld.contactDelegate = self
         endOfScreenLeft = (self.size.width / 2 ) * CGFloat(-1)
         endOfScreenRight =  self.size.width / 2
-        
+        endOfScreenTop =  self.size.height / 2
+        endOfScreenBottom =  self.size.height / 2 * -1
         addBG()
         addWhite()
         //6-26 addEnemies()
         scoreLabel = SKLabelNode(text: "0")
         scoreLabel.position.y = -(self.size.height/4)
         countDownText.position.y += 20
+        moneyText.fontColor = SKColor.redColor()
+        moneyText.position = CGPoint(x:endOfScreenLeft+32, y:endOfScreenTop-20)
+        moneyText.fontSize = 20
         addChild(scoreLabel)
         addChild(countDownText)
+        addChild(moneyText)
         addChild(reset)
         countDownText.hidden = true
         reset.name = "reset"
@@ -48,9 +59,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        hero.emit = true
-        gameOver = true
-        reset.hidden = false
+        
+        if(contact.bodyA.categoryBitMask.hashValue == 3) ||
+          (contact.bodyB.categoryBitMask.hashValue == 3){
+        }
+        else{
+            hero.emit = true
+            gameOver = true
+            reset.hidden = false
+        }
     }
     
     func restartGame(){
@@ -106,8 +123,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         println("Add White")
     }
     
-    func addNewEnemy(type : String){
-        var newEnemySprite : EnemySprite
+    func addNewEnemy(){
+        var newEnemySprite : Sprite
         if arc4random_uniform(2) == 1{
             newEnemySprite = WavyEnemy(screen : self.size.width / 2)
         }
@@ -115,9 +132,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             newEnemySprite = LineEnemy(screen : self.size.width / 2)
         }
         enemySprites.append(newEnemySprite)
-
         addChild(newEnemySprite.getSpriteNode())
-        
     }
     
     /*func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
@@ -161,18 +176,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var index = 0
         if !gameOver{
             if (enemySprites.count < 5){
-                addNewEnemy("gray")
+                addNewEnemy()
             }
-            if (arc4random_uniform(500) == 1 && enemySprites.count < 7){
-                addNewEnemy("gray")
+            if (arc4random_uniform(75) == 1 && enemySprites.count < 10){
+                addNewEnemy()
             }
             for  index = 0; index < enemySprites.count; ++index {
-                if enemySprites[index].guy.position.x < endOfScreenLeft {
+                if enemySprites[index].guy.position.x < endOfScreenLeft ||
+                   enemySprites[index].guy.position.x > endOfScreenRight {
                     enemySprites[index].guy.removeAllChildren()
                     enemySprites[index].guy.removeFromParent()
                     enemySprites.removeAtIndex(index)
                     updateScore()
-                    print("DEAD")
                 }
                 else{
                     enemySprites[index].motion()

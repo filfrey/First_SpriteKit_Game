@@ -9,8 +9,8 @@
 import Foundation
 import SpriteKit
 
-class EnemySprite{
-    var speed: Float = 0.0
+class Sprite{
+    var speed: Float
     var guy:SKSpriteNode // Is going to be a member of SKSpriteNode
     var currentFrame = 0
     var randomFrame = 0 // For when the frame the enemy moves into screen
@@ -21,6 +21,7 @@ class EnemySprite{
     enum ColliderType:UInt32{
         case Hero = 1
         case EnemySprite = 2
+        case PowerUp = 3
     }
     
     init(speed:Float,guy:SKSpriteNode){
@@ -37,5 +38,8 @@ class EnemySprite{
     func motion(){}
     func getSpriteNode()->SKSpriteNode{
         return guy
+    }
+    func getColliderType() -> UInt32{
+        return ColliderType.EnemySprite.rawValue
     }
 }

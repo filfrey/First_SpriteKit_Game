@@ -9,12 +9,19 @@
 import Foundation
 import SpriteKit
 
-class LineEnemy : EnemySprite{
+class LineEnemy : Sprite{
     var newSpeed = 5 + Float(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var lineEnemySpriteNode = SKSpriteNode(imageNamed: "green")
-    init(screen : CGFloat) {
-        let type = "wavy"
+    var movingLeft = true
+    
+    init(var screen : CGFloat) {
+        if Int(arc4random_uniform(2)) == 1{
+            movingLeft = false
+            screen  *= -1
+            newYPos *= -1
+        }
+        
         super.init(speed: newSpeed,guy: lineEnemySpriteNode)
         yPos = newYPos
         lineEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: lineEnemySpriteNode.size.width/2)
@@ -23,8 +30,6 @@ class LineEnemy : EnemySprite{
         lineEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
         lineEnemySpriteNode.position.x = screen
         lineEnemySpriteNode.position.y = newYPos
-        println(self.guy.position.y)
-        println(newYPos)
         self.motion()
     }
     
@@ -34,7 +39,13 @@ class LineEnemy : EnemySprite{
     
     override func motion(){
         if self.moving{
-            lineEnemySpriteNode.position.x -= CGFloat(self.speed)
+            if movingLeft{
+                lineEnemySpriteNode.position.x -= CGFloat(self.speed)
+            }
+            else{
+                lineEnemySpriteNode.position.x += CGFloat(self.speed)
+            }
+            
         }
         else{
             self.currentFrame++
@@ -44,6 +55,8 @@ class LineEnemy : EnemySprite{
         }
         
     }
-    
+    override func getColliderType() -> UInt32{
+        return ColliderType.EnemySprite.rawValue
+    }
     
 }

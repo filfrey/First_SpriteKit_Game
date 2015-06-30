@@ -9,14 +9,18 @@
 import Foundation
 import SpriteKit
 
-class WavyEnemy : EnemySprite{
+class WavyEnemy : Sprite{
     var newSpeed = 5 + Float(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var wavyEnemySpriteNode = SKSpriteNode(imageNamed: "gray")
+    var movingLeft = true
     
-    init(screen : CGFloat) {
-        let type = "gray"
-        print(newSpeed)
+    init(var screen : CGFloat) {
+        if Int(arc4random_uniform(2)) == 1{
+            movingLeft = false
+            screen  *= -1
+            newYPos *= -1
+        }
         super.init(speed: newSpeed,guy: wavyEnemySpriteNode)
         
         yPos = newYPos
@@ -35,9 +39,15 @@ class WavyEnemy : EnemySprite{
         
     override func motion(){
         if self.moving{
+            
             self.guy.position.y = CGFloat(Double(self.guy.position.y) + sin(self.angle) * self.range)
             self.angle += 0.1
-            self.guy.position.x -= CGFloat(self.speed)
+            if movingLeft{
+                self.guy.position.x -= CGFloat(self.speed)
+            }
+            else{
+                self.guy.position.x += CGFloat(self.speed)
+            }
         }
         else{
             self.currentFrame++
@@ -47,6 +57,8 @@ class WavyEnemy : EnemySprite{
         }
         
     }
-    
+    override func getColliderType() -> UInt32{
+        return ColliderType.EnemySprite.rawValue
+    }
     
 }

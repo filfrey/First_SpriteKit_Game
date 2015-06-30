@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6977EDE6-CD37-4365-8A68-FF5429D1978B</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Not Like You</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0B3F39CBAAA668DA502A6F599A1319A2C5F5644B</key>
+		<string>https://github.com/filfrey/First_SpriteKit_Game.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Not Like You.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0B3F39CBAAA668DA502A6F599A1319A2C5F5644B</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/filfrey/First_SpriteKit_Game.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0B3F39CBAAA668DA502A6F599A1319A2C5F5644B</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0B3F39CBAAA668DA502A6F599A1319A2C5F5644B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Not_Like_You</string>
+		</dict>
+	</array>
+</dict>
+</plist>

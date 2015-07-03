@@ -60,10 +60,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBeginContact(contact: SKPhysicsContact) {
         
-        if(contact.bodyA.categoryBitMask.hashValue == 3) ||
-          (contact.bodyB.categoryBitMask.hashValue == 3){
+        var mask = contact.bodyB.categoryBitMask
+
+        if(contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue){
+            mask = contact.bodyB.categoryBitMask
+        }
+        else if(contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue){
+            mask = contact.bodyA.categoryBitMask
+        }
+        else{return}
+        if(mask == ColliderType.PowerUps.rawValue){
+            money++
+            moneyText.text = String(money)
         }
         else{
+            print(contact.bodyB.categoryBitMask)
             hero.emit = true
             gameOver = true
             reset.hidden = false
@@ -95,7 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             countDownText.text = String(countDown)
         }
         else {
-            countDown = 5
+            countDown = 3
             countDownText.text = String(countDown)
             countDownText.hidden = true
             gameOver = false
@@ -109,7 +120,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func addWhite(){ // Creates the User sprite
-        
+        print("WHAT?")
         white.physicsBody = SKPhysicsBody(circleOfRadius: white.size.width/2)
         white.physicsBody!.affectedByGravity = false
         white.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
@@ -125,11 +136,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addNewEnemy(){
         var newEnemySprite : Sprite
-        if arc4random_uniform(2) == 1{
+        var random = arc4random_uniform(3)
+        if random == 1{
             newEnemySprite = WavyEnemy(screen : self.size.width / 2)
         }
-        else{
+        else if random == 2{
             newEnemySprite = LineEnemy(screen : self.size.width / 2)
+        }
+        else {
+            newEnemySprite = CoinSprite(screen : self.size.width / 2)
         }
         enemySprites.append(newEnemySprite)
         addChild(newEnemySprite.getSpriteNode())
@@ -200,11 +215,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updateHeroEmitter(){
         if hero.emit && hero.emitFrameCount < hero.maxEmitFrameCount{
             hero.emitFrameCount++
-            hero.particles.hidden = false
+            //hero.particles.hidden = false
         }
         else{
             hero.emit = false
-            hero.particles.hidden = true
+            //hero.particles.hidden = true
             hero.emitFrameCount = 0
         }
     }

@@ -9,7 +9,7 @@
 import Foundation
 import SpriteKit
 
-class WavyEnemy : Sprite{
+class WavyEnemy : Sprite, SharedAssets{
     var newSpeed = 5 + Float(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var wavyEnemySpriteNode = SKSpriteNode(imageNamed: "gray")
@@ -39,7 +39,6 @@ class WavyEnemy : Sprite{
         
     override func motion(){
         if self.moving{
-            
             self.guy.position.y = CGFloat(Double(self.guy.position.y) + sin(self.angle) * self.range)
             self.angle += 0.1
             if movingLeft{
@@ -55,10 +54,13 @@ class WavyEnemy : Sprite{
                 self.moving = true
             }
         }
-        
     }
     override func getColliderType() -> UInt32{
         return ColliderType.EnemySprite.rawValue
     }
     
+    
+    static func loadSharedAssets(){
+        
+    }
 }

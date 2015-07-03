@@ -9,12 +9,11 @@
 import Foundation
 import SpriteKit
 
-class LineEnemy : Sprite{
+class LineEnemy : Sprite, SharedAssets{
     var newSpeed = 5 + Float(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var lineEnemySpriteNode = SKSpriteNode(imageNamed: "green")
     var movingLeft = true
-    
     init(var screen : CGFloat) {
         if Int(arc4random_uniform(2)) == 1{
             movingLeft = false
@@ -23,6 +22,7 @@ class LineEnemy : Sprite{
         }
         
         super.init(speed: newSpeed,guy: lineEnemySpriteNode)
+        
         yPos = newYPos
         lineEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: lineEnemySpriteNode.size.width/2)
         lineEnemySpriteNode.physicsBody!.affectedByGravity = false
@@ -37,7 +37,18 @@ class LineEnemy : Sprite{
         return lineEnemySpriteNode
     }
     
+    override func collidedWith(other : SKPhysicsBody){
+        if other.categoryBitMask & ColliderType.EnemySprite.rawValue == 0 {
+            return
+        }
+        
+        if let enemy = other.node as? Sprite {
+            enemy.remove()
+        }
+    }
+    
     override func motion(){
+        print("here")
         if self.moving{
             if movingLeft{
                 lineEnemySpriteNode.position.x -= CGFloat(self.speed)
@@ -57,6 +68,10 @@ class LineEnemy : Sprite{
     }
     override func getColliderType() -> UInt32{
         return ColliderType.EnemySprite.rawValue
+    }
+    
+    static func loadSharedAssets(){
+        
     }
     
 }

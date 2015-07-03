@@ -18,6 +18,9 @@ class Sprite{
     var angle = 0.0
     var range = 2.0
     var yPos = CGFloat()
+    enum SpriteType {
+        case Hero, LineEnemy, WavyEnemy, CoinSprite
+    }
     enum ColliderType:UInt32{
         case Hero = 1
         case EnemySprite = 2
@@ -29,12 +32,15 @@ class Sprite{
         self.guy = guy
         self.setRandomFrame()
     }
-    
+    func remove(){
+        self.guy.removeAllChildren()
+        self.guy.removeFromParent()
+    }
     func setRandomFrame(){
         var range = UInt32(0)..<UInt32(100)
         self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
     }
-    
+    func collidedWith(other : SKPhysicsBody){}
     func motion(){}
     func getSpriteNode()->SKSpriteNode{
         return guy

@@ -8,7 +8,7 @@
 
 import Foundation
 import SpriteKit
-
+/*
 class CoinSprite : Sprite, SharedAssets{
     var newSpeed = (Float)(10)
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
@@ -70,3 +70,4 @@ class CoinSprite : Sprite, SharedAssets{
         
     }
 }
+*/

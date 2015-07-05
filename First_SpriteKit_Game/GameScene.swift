@@ -9,6 +9,7 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
     var hero:Hero!
     var touchLocation = CGPoint()
     var gameOver = false
@@ -59,26 +60,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
+        if let spriteType = contact.bodyB.node as? Sprite {
+            print(spriteType.isKindOfClass(LineEnemy))
+        }
         
-        var mask = contact.bodyB.categoryBitMask
-
-        if(contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue){
-            mask = contact.bodyB.categoryBitMask
+        if contact.bodyA.categoryBitMask == 1 || contact.bodyB.categoryBitMask == 1{
+            let rawProjectileType = ColliderType.Hero.rawValue
+            let bodyAIsProjectile = contact.bodyA.categoryBitMask & rawProjectileType == rawProjectileType
+            let bodyBIsProjectile = contact.bodyB.categoryBitMask & rawProjectileType == rawProjectileType
+            
+            if bodyAIsProjectile || bodyBIsProjectile {
+                hero.emit = true
+                gameOver = true
+                reset.hidden = false
+            }
         }
-        else if(contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue){
-            mask = contact.bodyA.categoryBitMask
-        }
-        else{return}
-        if(mask == ColliderType.PowerUps.rawValue){
-            money++
-            moneyText.text = String(money)
+        else{}
+        /*if(contact.bodyA.categoryBitMask.hashValue == 3) ||
+            (contact.bodyB.categoryBitMask.hashValue == 3){
         }
         else{
-            print(contact.bodyB.categoryBitMask)
             hero.emit = true
             gameOver = true
             reset.hidden = false
-        }
+        }*/
     }
     
     func restartGame(){
@@ -88,12 +93,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.text = "0"
         var int = 0
         while !enemySprites.isEmpty {
-            enemySprites.last?.guy.removeFromParent()
+            enemySprites.last?.removeFromParent()
             enemySprites.removeLast()
         }
         var origin = CGPoint(x: 0, y: 0)
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
-
+        
         hero.guy.position.y=0
         hero.guy.position.x=0
         hero.guy.removeAllActions()
@@ -106,7 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             countDownText.text = String(countDown)
         }
         else {
-            countDown = 3
+            countDown = 5
             countDownText.text = String(countDown)
             countDownText.hidden = true
             gameOver = false
@@ -120,7 +125,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func addWhite(){ // Creates the User sprite
-        print("WHAT?")
+        
         white.physicsBody = SKPhysicsBody(circleOfRadius: white.size.width/2)
         white.physicsBody!.affectedByGravity = false
         white.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
@@ -136,24 +141,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addNewEnemy(){
         var newEnemySprite : Sprite
-        var random = arc4random_uniform(3)
-        if random == 1{
-            newEnemySprite = WavyEnemy(screen : self.size.width / 2)
-        }
-        else if random == 2{
-            newEnemySprite = LineEnemy(screen : self.size.width / 2)
-        }
-        else {
-            newEnemySprite = CoinSprite(screen : self.size.width / 2)
-        }
+        newEnemySprite = LineEnemy(screen : self.size.width / 2)
         enemySprites.append(newEnemySprite)
-        addChild(newEnemySprite.getSpriteNode())
+        addChild(newEnemySprite)
     }
     
     /*func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
-        enemySpriteNode.position.x = endOfScreenRight
-        enemySpriteNode.position.y = yPos
-        println("reset x and Y position for sprite")
+    enemySpriteNode.position.x = endOfScreenRight
+    enemySpriteNode.position.y = yPos
+    println("reset x and Y position for sprite")
     }*/
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -164,7 +160,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 touchLocation = CGPoint(
                     x:(touch.locationInView(self.view!).x) - (self.size.width/2),
                     y:(touch.locationInView(self.view!).y * -1) + (self.size.height/2)
-                    )
+                )
             }
             else {
                 let location = touch.locationInNode(self)
@@ -185,7 +181,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hero.guy.runAction(moveAction){}
         }
     }
-   
+    
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
         var index = 0
@@ -197,12 +193,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 addNewEnemy()
             }
             for  index = 0; index < enemySprites.count; ++index {
-                if enemySprites[index].guy.position.x < endOfScreenLeft ||
-                   enemySprites[index].guy.position.x > endOfScreenRight {
-                    enemySprites[index].guy.removeAllChildren()
-                    enemySprites[index].guy.removeFromParent()
-                    enemySprites.removeAtIndex(index)
-                    updateScore()
+                if enemySprites[index].position.x < endOfScreenLeft ||
+                    enemySprites[index].position.x > endOfScreenRight {
+                        enemySprites[index].remove()
+                        updateScore()
+                        enemySprites.removeAtIndex(index)
                 }
                 else{
                     enemySprites[index].motion()
@@ -215,11 +210,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updateHeroEmitter(){
         if hero.emit && hero.emitFrameCount < hero.maxEmitFrameCount{
             hero.emitFrameCount++
-            //hero.particles.hidden = false
+            hero.particles.hidden = false
         }
         else{
             hero.emit = false
-            //hero.particles.hidden = true
+            hero.particles.hidden = true
             hero.emitFrameCount = 0
         }
     }

@@ -21,11 +21,11 @@ func inferCharacterType(fromType: Sprite.Type) -> CharacterType {
     case is Hero.Type:
         return CharacterType.Hero
     case is LineEnemy.Type:
-        return CharacterType.LineEnemy
+        return CharacterType.LineEnemy/*
     case is WavyEnemy.Type:
         return CharacterType.WavyEnemy
     case is CoinSprite.Type:
-        return CharacterType.Coin
+        return CharacterType.Coin*/
     default:
         fatalError("Unknown type provided for \(__FUNCTION__).")
     }

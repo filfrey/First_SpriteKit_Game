@@ -10,21 +10,19 @@ import Foundation
 import SpriteKit // Needed to create SKSpriteNode
 
 
-class Hero : Sprite, SharedAssets{ // Needs a initalizer in order to work
-    
+class Hero{ // Needs a initalizer in order to work
+    var guy :SKSpriteNode
+    var speed = 0.1
     var emit = false
     var emitFrameCount = 0
     var maxEmitFrameCount = 30
-    
-    var heroSpriteNode = SKSpriteNode(imageNamed: "white")
+    var particles:SKEmitterNode
     // Have to eventually add the creation of hero her instead of Game Scene
     
     
     init(guy:SKSpriteNode, particles:SKEmitterNode){
-        super.init(speed: 5,guy: heroSpriteNode)
+        self.guy = guy
+        self.particles = particles
     }
     
-    static func loadSharedAssets(){
-        
-    }
 }

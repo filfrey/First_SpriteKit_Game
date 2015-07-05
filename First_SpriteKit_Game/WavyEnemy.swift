@@ -8,7 +8,7 @@
 
 import Foundation
 import SpriteKit
-
+/*
 class WavyEnemy : Sprite, SharedAssets{
     var newSpeed = 5 + Float(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
@@ -64,3 +64,4 @@ class WavyEnemy : Sprite, SharedAssets{
         
     }
 }
+*/

@@ -10,51 +10,59 @@ import Foundation
 import SpriteKit
 
 class LineEnemy : Sprite, SharedAssets{
-    var newSpeed = 5 + Float(arc4random_uniform(4))
+    var newSpeed = 5 + CGFloat(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var lineEnemySpriteNode = SKSpriteNode(imageNamed: "green")
     var movingLeft = true
-    init(var screen : CGFloat) {
+    convenience init(var screen : CGFloat) {
+        self.init(imageNamed : "green")
+        
         if Int(arc4random_uniform(2)) == 1{
             movingLeft = false
             screen  *= -1
             newYPos *= -1
         }
-        
-        super.init(speed: newSpeed,guy: lineEnemySpriteNode)
-        
+    
         yPos = newYPos
-        lineEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: lineEnemySpriteNode.size.width/2)
-        lineEnemySpriteNode.physicsBody!.affectedByGravity = false
-        lineEnemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
-        lineEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-        lineEnemySpriteNode.position.x = screen
-        lineEnemySpriteNode.position.y = newYPos
+        self.speed = newSpeed
+        self.position.x = screen
+        self.position.y = newYPos
         self.motion()
+        self.configurePhysicsBody()
     }
     
-    override func getSpriteNode()->SKSpriteNode{
-        return lineEnemySpriteNode
+    override func configurePhysicsBody(){
+        self.physicsBody = SKPhysicsBody(circleOfRadius: 10.0)
+        self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = ColliderType.Enemy
+        self.physicsBody!.collisionBitMask = ColliderType.All
+        self.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
     }
     
     override func collidedWith(other : SKPhysicsBody){
-        if other.categoryBitMask & ColliderType.EnemySprite.rawValue == 0 {
+        if other.categoryBitMask & ColliderType.Hero.rawValue == 0 {
             return
         }
         
         if let enemy = other.node as? Sprite {
-            enemy.remove()
+        //    enemy.remove()
         }
     }
     
+    override func remove(){
+        self.removeAllActions()
+        self.removeFromParent()
+        self.removeAllChildren()
+        physicsBody = nil
+    }
+    
     override func motion(){
-        print("here")
         if self.moving{
             if movingLeft{
-                lineEnemySpriteNode.position.x -= CGFloat(self.speed)
+                self.position.x -= CGFloat(self.speed)
             }
             else{
-                lineEnemySpriteNode.position.x += CGFloat(self.speed)
+                self.position.x += CGFloat(self.speed)
             }
             
         }
@@ -65,9 +73,6 @@ class LineEnemy : Sprite, SharedAssets{
             }
         }
         
-    }
-    override func getColliderType() -> UInt32{
-        return ColliderType.EnemySprite.rawValue
     }
     
     static func loadSharedAssets(){

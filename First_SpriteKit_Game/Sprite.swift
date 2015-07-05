@@ -9,9 +9,7 @@
 import Foundation
 import SpriteKit
 
-class Sprite{
-    var speed: Float
-    var guy:SKSpriteNode // Is going to be a member of SKSpriteNode
+class Sprite : SKSpriteNode{
     var currentFrame = 0
     var randomFrame = 0 // For when the frame the enemy moves into screen
     var moving = false
@@ -23,29 +21,28 @@ class Sprite{
     }
     enum ColliderType:UInt32{
         case Hero = 1
-        case EnemySprite = 2
-        case PowerUp = 3
+        case LineEnemy = 5
+        case WavyEnemy = 6
+        case CoinSprite = 10
+        
+        static var All = ColliderType.Hero.rawValue | ColliderType.LineEnemy.rawValue | ColliderType.WavyEnemy.rawValue | ColliderType.CoinSprite.rawValue
+        
+        static var Enemy = ColliderType.LineEnemy.rawValue | ColliderType.WavyEnemy.rawValue
+        
+        static var PowerUp = ColliderType.CoinSprite.rawValue
     }
     
-    init(speed:Float,guy:SKSpriteNode){
-        self.speed = speed
-        self.guy = guy
-        self.setRandomFrame()
+    convenience init(named : String) {
+        self.init(imageNamed: named)
     }
-    func remove(){
-        self.guy.removeAllChildren()
-        self.guy.removeFromParent()
-    }
+    
     func setRandomFrame(){
         var range = UInt32(0)..<UInt32(100)
         self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
     }
     func collidedWith(other : SKPhysicsBody){}
     func motion(){}
-    func getSpriteNode()->SKSpriteNode{
-        return guy
-    }
-    func getColliderType() -> UInt32{
-        return ColliderType.EnemySprite.rawValue
-    }
+    func configurePhysicsBody(){}
+    func remove(){}
+    
 }

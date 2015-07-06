@@ -8,66 +8,43 @@
 
 import Foundation
 import SpriteKit
-/*
+
 class CoinSprite : Sprite, SharedAssets{
-    var newSpeed = (Float)(10)
+    var newSpeed = 50
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
-    var coinSpriteNode = SKSpriteNode(imageNamed: "money")
-    var value = CGFloat(arc4random_uniform(10)) - 3
-    var randomXPos : (CGFloat)
+    var newValue = Int(arc4random_uniform(10)) + 3
     var movingLeft = true
     
-    init(var screen : CGFloat) {
-        if Int(arc4random_uniform(2)) == 1{
-            movingLeft = false
-            screen  *= -1
-            newYPos *= -1
-        }
+    convenience init(var screen : CGFloat) {
+        self.init(imageNamed : "money")
         
-        randomXPos = CGFloat(arc4random_uniform(496)) - CGFloat(248)
-        
-        super.init(speed: newSpeed,guy: coinSpriteNode)
-        
-        coinSpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: coinSpriteNode.size.width/2)
-        coinSpriteNode.physicsBody!.affectedByGravity = false
-        coinSpriteNode.physicsBody!.categoryBitMask = ColliderType.PowerUp.rawValue
-        coinSpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-        coinSpriteNode.position.x = randomXPos
-        coinSpriteNode.position.y = newYPos
+        yPos = newYPos
+        self.speed = 0
+        self.position.x = CGFloat(arc4random_uniform(300)) - CGFloat(248)
+        self.position.y = newYPos
         self.motion()
-        self.randomFrame = 0
+        self.configurePhysicsBody()
     }
     
-    
-    override func getSpriteNode()->SKSpriteNode{
-        return coinSpriteNode
+    override func configurePhysicsBody(){
+        self.physicsBody = SKPhysicsBody(circleOfRadius: 18)
+        self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = ColliderType.Enemy
+        self.physicsBody!.collisionBitMask = ColliderType.All
+        self.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
+    }
+    override func remove(){
+        self.removeAllActions()
+        self.removeFromParent()
+        self.removeAllChildren()
+        physicsBody = nil
     }
     
-    override func motion(){
-        if self.moving{
-            if movingLeft{
-                coinSpriteNode.position.x -= CGFloat(self.speed)
-            }
-            else{
-                coinSpriteNode.position.x += CGFloat(self.speed)
-            }
-            
-        }
-        else{
-            self.currentFrame++
-            if self.currentFrame > self.randomFrame{
-                self.moving = true
-            }
-        }
+    override func motion(){speed--}
+    override func getValue() -> Int {
+        return newValue
     }
-    
-    override func getColliderType() -> UInt32{
-        return ColliderType.PowerUp.rawValue
-    }
-    
-    
     static func loadSharedAssets(){
         
     }
 }
-*/

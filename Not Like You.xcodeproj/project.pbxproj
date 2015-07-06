@@ -140,9 +140,9 @@
 				B0820B811B36574600599315 /* Hero.swift */,
 				B0907C611B3E44EA00AF8839 /* LineEnemy.swift */,
 				B0820B8F1B3CBD3C00599315 /* WavyEnemy.swift */,
+				B0F6ECE81B40B50200D632D6 /* CoinSprite.swift */,
 				B0907C631B3E860C00AF8839 /* HitParticle.sks */,
 				B0820B861B37B6A000599315 /* spark.png */,
-				B0F6ECE81B40B50200D632D6 /* CoinSprite.swift */,
 			);
 			name = Sprites/Particles;
 			sourceTree = "<group>";

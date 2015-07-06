@@ -16,6 +16,7 @@ class Sprite : SKSpriteNode{
     var angle = 0.0
     var range = 2.0
     var yPos = CGFloat()
+    var value = 0
     enum SpriteType {
         case Hero, LineEnemy, WavyEnemy, CoinSprite
     }
@@ -44,5 +45,6 @@ class Sprite : SKSpriteNode{
     func motion(){}
     func configurePhysicsBody(){}
     func remove(){}
+    func getValue()-> Int {return value}
     
 }

@@ -8,44 +8,47 @@
 
 import Foundation
 import SpriteKit
-/*
+
 class WavyEnemy : Sprite, SharedAssets{
-    var newSpeed = 5 + Float(arc4random_uniform(4))
+    var newSpeed = 5 + CGFloat(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
-    var wavyEnemySpriteNode = SKSpriteNode(imageNamed: "gray")
     var movingLeft = true
     
-    init(var screen : CGFloat) {
+    convenience init(var screen : CGFloat) {
+        self.init(imageNamed : "gray")
+        
         if Int(arc4random_uniform(2)) == 1{
             movingLeft = false
             screen  *= -1
             newYPos *= -1
         }
-        super.init(speed: newSpeed,guy: wavyEnemySpriteNode)
         
         yPos = newYPos
-        wavyEnemySpriteNode.physicsBody = SKPhysicsBody(circleOfRadius: wavyEnemySpriteNode.size.width/2)
-        wavyEnemySpriteNode.physicsBody!.affectedByGravity = false
-        wavyEnemySpriteNode.physicsBody!.categoryBitMask = ColliderType.EnemySprite.rawValue
-        wavyEnemySpriteNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-        wavyEnemySpriteNode.position.x = screen
-        wavyEnemySpriteNode.position.y = newYPos
+        
+        self.speed = newSpeed
+        self.position.x = screen
+        self.position.y = newYPos
         self.motion()
+        self.configurePhysicsBody()
     }
     
-    override func getSpriteNode()->SKSpriteNode{
-        return wavyEnemySpriteNode
+    override func configurePhysicsBody(){
+        self.physicsBody = SKPhysicsBody(circleOfRadius: 10.0)
+        self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = ColliderType.Enemy
+        self.physicsBody!.collisionBitMask = ColliderType.All
+        self.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
     }
-        
+    
     override func motion(){
         if self.moving{
-            self.guy.position.y = CGFloat(Double(self.guy.position.y) + sin(self.angle) * self.range)
+            self.position.y = CGFloat(Double(self.position.y) + sin(self.angle) * self.range)
             self.angle += 0.1
             if movingLeft{
-                self.guy.position.x -= CGFloat(self.speed)
+                self.position.x -= CGFloat(self.speed)
             }
             else{
-                self.guy.position.x += CGFloat(self.speed)
+                self.position.x += CGFloat(self.speed)
             }
         }
         else{
@@ -55,13 +58,15 @@ class WavyEnemy : Sprite, SharedAssets{
             }
         }
     }
-    override func getColliderType() -> UInt32{
-        return ColliderType.EnemySprite.rawValue
-    }
     
+    override func remove(){
+        self.removeAllActions()
+        self.removeFromParent()
+        self.removeAllChildren()
+        physicsBody = nil
+    }
     
     static func loadSharedAssets(){
         
     }
 }
-*/

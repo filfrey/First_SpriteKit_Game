@@ -25,6 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var countDownText = SKLabelNode(text: "5")
     var countDown = 5
     var money = 0
+    var powerUpSprite = false
     var moneyText = SKLabelNode(text: "Money: ")
     let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
     
@@ -60,20 +61,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        if let spriteType = contact.bodyB.node as? Sprite {
-            print(spriteType.isKindOfClass(LineEnemy))
-        }
+        
         
         if contact.bodyA.categoryBitMask == 1 || contact.bodyB.categoryBitMask == 1{
-            let rawProjectileType = ColliderType.Hero.rawValue
+            let rawProjectileType = ColliderType.PowerUps.rawValue
             let bodyAIsProjectile = contact.bodyA.categoryBitMask & rawProjectileType == rawProjectileType
             let bodyBIsProjectile = contact.bodyB.categoryBitMask & rawProjectileType == rawProjectileType
-            
+            if let spriteType = contact.bodyB.node as? Sprite {
+                if spriteType.isKindOfClass(CoinSprite){
+                    money += spriteType.getValue()
+                    moneyText.text = String(money)
+                    powerUpSprite = false
+                    spriteType.remove()
+                    return
+                }
+            }
             if bodyAIsProjectile || bodyBIsProjectile {
                 hero.emit = true
                 gameOver = true
                 reset.hidden = false
             }
+            
         }
         else{}
         /*if(contact.bodyA.categoryBitMask.hashValue == 3) ||
@@ -141,9 +149,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addNewEnemy(){
         var newEnemySprite : Sprite
-        newEnemySprite = LineEnemy(screen : self.size.width / 2)
+        var screenSize = self.size.width / 2
+        var random = arc4random_uniform(2)
+        if random == 1{
+            newEnemySprite = WavyEnemy(screen : self.size.width / 2)
+        }
+        else{
+            newEnemySprite = LineEnemy(screen : self.size.width / 2)
+        }
         enemySprites.append(newEnemySprite)
         addChild(newEnemySprite)
+    }
+    
+    func addNewPowerUp(){
+        var newPowerUpSprite : Sprite
+        var screenSize = self.size.width / 2
+        newPowerUpSprite = CoinSprite(screen : self.size.width / 2)
+        powerUpSprite = true
+        addChild(newPowerUpSprite)
     }
     
     /*func resetEnemySprite(enemySpriteNode:SKSpriteNode, yPos:CGFloat){
@@ -191,6 +214,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             if (arc4random_uniform(75) == 1 && enemySprites.count < 10){
                 addNewEnemy()
+            }
+            if (arc4random_uniform(35) == 1 && !powerUpSprite){
+                addNewPowerUp()
             }
             for  index = 0; index < enemySprites.count; ++index {
                 if enemySprites[index].position.x < endOfScreenLeft ||

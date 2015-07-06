@@ -12,7 +12,6 @@ import SpriteKit
 class LineEnemy : Sprite, SharedAssets{
     var newSpeed = 5 + CGFloat(arc4random_uniform(4))
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
-    var lineEnemySpriteNode = SKSpriteNode(imageNamed: "green")
     var movingLeft = true
     convenience init(var screen : CGFloat) {
         self.init(imageNamed : "green")
@@ -32,7 +31,7 @@ class LineEnemy : Sprite, SharedAssets{
     }
     
     override func configurePhysicsBody(){
-        self.physicsBody = SKPhysicsBody(circleOfRadius: 10.0)
+        self.physicsBody = SKPhysicsBody(circleOfRadius: 18)
         self.physicsBody!.affectedByGravity = false
         self.physicsBody!.categoryBitMask = ColliderType.Enemy
         self.physicsBody!.collisionBitMask = ColliderType.All

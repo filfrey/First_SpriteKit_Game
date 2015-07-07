@@ -10,9 +10,10 @@ import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    var hero:Hero!
+    var white : Hero!
     var touchLocation = CGPoint()
     var gameOver = false
+    var powerUpSprites:[Sprite] = []
     var enemySprites:[Sprite] = []
     var endOfScreenRight = CGFloat()
     var endOfScreenLeft = CGFloat()
@@ -22,13 +23,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var scoreLabel = SKLabelNode()
     var reset = SKSpriteNode(imageNamed: "reset")
     var timer = NSTimer()
-    var countDownText = SKLabelNode(text: "5")
-    var countDown = 5
+    var countDownText = SKLabelNode(text: "3")
+    var countDown = 3
     var money = 0
-    var powerUpSprite = false
     var moneyText = SKLabelNode(text: "Money: ")
-    let white = SKSpriteNode(imageNamed: "white") // Creates the Consant white(player)
-    
     
     enum ColliderType:UInt32{
         case Hero        = 1
@@ -49,7 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.position.y = -(self.size.height/4)
         countDownText.position.y += 20
         moneyText.fontColor = SKColor.redColor()
-        moneyText.position = CGPoint(x:endOfScreenLeft+32, y:endOfScreenTop-20)
+        moneyText.position = CGPoint(x:endOfScreenRight-54, y:endOfScreenTop-20)
         moneyText.fontSize = 20
         addChild(scoreLabel)
         addChild(countDownText)
@@ -61,37 +59,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        
-        
         if contact.bodyA.categoryBitMask == 1 || contact.bodyB.categoryBitMask == 1{
             let rawProjectileType = ColliderType.PowerUps.rawValue
             let bodyAIsProjectile = contact.bodyA.categoryBitMask & rawProjectileType == rawProjectileType
             let bodyBIsProjectile = contact.bodyB.categoryBitMask & rawProjectileType == rawProjectileType
             if let spriteType = contact.bodyB.node as? Sprite {
-                if spriteType.isKindOfClass(CoinSprite){
+                if spriteType.isKindOfClass(CoinPowerup){
                     money += spriteType.getValue()
-                    moneyText.text = String(money)
-                    powerUpSprite = false
+                    moneyText.text = "Money: " + String(money)
+                    moneyText.position = CGPoint(x:endOfScreenRight-54, y:endOfScreenTop-20)
+                    powerUpSprites.last?.remove()
+                    powerUpSprites.removeAll(keepCapacity: false)
+                    spriteType.remove()
+                    return
+                }
+                else if (spriteType.isKindOfClass(InvinciblePowerup)){
+                    money += spriteType.getValue() * 100
+                    moneyText.text = "Money: " + String(money)
+                    moneyText.position = CGPoint(x:endOfScreenRight-54, y:endOfScreenTop-20)
+                    powerUpSprites.last?.remove()
+                    powerUpSprites.removeAll(keepCapacity: false)
                     spriteType.remove()
                     return
                 }
             }
             if bodyAIsProjectile || bodyBIsProjectile {
-                hero.emit = true
+                //hero.emit = true
+                white.remove()
                 gameOver = true
                 reset.hidden = false
             }
-            
         }
-        else{}
-        /*if(contact.bodyA.categoryBitMask.hashValue == 3) ||
-            (contact.bodyB.categoryBitMask.hashValue == 3){
-        }
-        else{
-            hero.emit = true
-            gameOver = true
-            reset.hidden = false
-        }*/
     }
     
     func restartGame(){
@@ -107,9 +105,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         var origin = CGPoint(x: 0, y: 0)
         timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
         
-        hero.guy.position.y=0
-        hero.guy.position.x=0
-        hero.guy.removeAllActions()
+        white.moveTo(origin)
+        if !powerUpSprites.isEmpty{
+            powerUpSprites.last?.remove()
+            powerUpSprites.removeAll(keepCapacity: false)
+        }
         println("Restarting Game")
     }
     
@@ -119,7 +119,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             countDownText.text = String(countDown)
         }
         else {
-            countDown = 5
+            countDown = 3
             countDownText.text = String(countDown)
             countDownText.hidden = true
             gameOver = false
@@ -134,15 +134,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addWhite(){ // Creates the User sprite
         
-        white.physicsBody = SKPhysicsBody(circleOfRadius: white.size.width/2)
-        white.physicsBody!.affectedByGravity = false
-        white.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
-        white.physicsBody!.contactTestBitMask = ColliderType.EnemySprite.rawValue
-        white.physicsBody!.collisionBitMask = ColliderType.EnemySprite.rawValue
         let heroParticles = SKEmitterNode(fileNamed: "HitParticle.sks")
         heroParticles.hidden = true
-        hero = Hero(guy:white, particles: heroParticles)// Creates a new Hero object called hero
-        white.addChild(heroParticles)
+        white = Hero(newParticles : heroParticles)
         addChild(white)                     // Adds the newly created hero
         println("Add White")
     }
@@ -164,8 +158,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func addNewPowerUp(){
         var newPowerUpSprite : Sprite
         var screenSize = self.size.width / 2
-        newPowerUpSprite = CoinSprite(screen : self.size.width / 2)
-        powerUpSprite = true
+        var random = arc4random_uniform(2)
+        if random == 1{
+            newPowerUpSprite = CoinPowerup(screen : self.size.width / 2)
+        }
+        else{
+            newPowerUpSprite = InvinciblePowerup(screen: self.size.width / 2)
+        }
+        powerUpSprites.append(newPowerUpSprite)
         addChild(newPowerUpSprite)
     }
     
@@ -201,7 +201,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // This makes it move smoothly
         let moveAction = SKAction.moveTo(touchLocation, duration: 0.5)
         if !gameOver{
-            hero.guy.runAction(moveAction){}
+            white.runAction(moveAction)
         }
     }
     
@@ -209,15 +209,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Called before each frame is rendered */
         var index = 0
         if !gameOver{
-            if (enemySprites.count < 5){
-                addNewEnemy()
-            }
-            if (arc4random_uniform(75) == 1 && enemySprites.count < 10){
-                addNewEnemy()
-            }
-            if (arc4random_uniform(35) == 1 && !powerUpSprite){
-                addNewPowerUp()
-            }
+            if (enemySprites.count < 5){ addNewEnemy() }
+            if (arc4random_uniform(75) == 1 && enemySprites.count < 10){ addNewEnemy() }
+            if (arc4random_uniform(35) == 1 && powerUpSprites.isEmpty){
+                addNewPowerUp() }
             for  index = 0; index < enemySprites.count; ++index {
                 if enemySprites[index].position.x < endOfScreenLeft ||
                     enemySprites[index].position.x > endOfScreenRight {
@@ -234,7 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateHeroEmitter(){
-        if hero.emit && hero.emitFrameCount < hero.maxEmitFrameCount{
+        /*if hero.emit && hero.emitFrameCount < hero.maxEmitFrameCount{
             hero.emitFrameCount++
             hero.particles.hidden = false
         }
@@ -242,7 +237,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             hero.emit = false
             hero.particles.hidden = true
             hero.emitFrameCount = 0
-        }
+        }*/
     }
     
     func updateScore(){

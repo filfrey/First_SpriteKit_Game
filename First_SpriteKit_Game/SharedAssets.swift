@@ -13,7 +13,7 @@ protocol SharedAssets {
 }
 
 enum CharacterType {
-    case Hero, LineEnemy, WavyEnemy, Coin
+    case Hero, LineEnemy, WavyEnemy, CoinPowerup, ShieldPowerup
 }
 
 func inferCharacterType(fromType: Sprite.Type) -> CharacterType {
@@ -24,8 +24,10 @@ func inferCharacterType(fromType: Sprite.Type) -> CharacterType {
         return CharacterType.LineEnemy
     case is WavyEnemy.Type:
         return CharacterType.WavyEnemy
-    case is CoinSprite.Type:
-        return CharacterType.Coin
+    case is CoinPowerup.Type:
+        return CharacterType.CoinPowerup
+    case is InvinciblePowerup.Type:
+        return CharacterType.ShieldPowerup
     default:
         fatalError("Unknown type provided for \(__FUNCTION__).")
     }

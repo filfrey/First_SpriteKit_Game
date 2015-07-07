@@ -18,29 +18,26 @@ class Sprite : SKSpriteNode{
     var yPos = CGFloat()
     var value = 0
     enum SpriteType {
-        case Hero, LineEnemy, WavyEnemy, CoinSprite
+        case Hero, LineEnemy, WavyEnemy, CoinPowerup, InvinciblePowerup
     }
     enum ColliderType:UInt32{
         case Hero = 1
         case LineEnemy = 5
         case WavyEnemy = 6
-        case CoinSprite = 10
+        case CoinPowerup = 10
+        case InvinciblePowerup = 11
         
-        static var All = ColliderType.Hero.rawValue | ColliderType.LineEnemy.rawValue | ColliderType.WavyEnemy.rawValue | ColliderType.CoinSprite.rawValue
-        
+        static var All = ColliderType.Hero.rawValue | ColliderType.LineEnemy.rawValue | ColliderType.WavyEnemy.rawValue | ColliderType.CoinPowerup.rawValue
+        static var Player = ColliderType.Hero.rawValue
         static var Enemy = ColliderType.LineEnemy.rawValue | ColliderType.WavyEnemy.rawValue
         
-        static var PowerUp = ColliderType.CoinSprite.rawValue
+        static var PowerUp = ColliderType.CoinPowerup.rawValue | ColliderType.InvinciblePowerup.rawValue
     }
     
     convenience init(named : String) {
         self.init(imageNamed: named)
     }
     
-    func setRandomFrame(){
-        var range = UInt32(0)..<UInt32(100)
-        self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
-    }
     func collidedWith(other : SKPhysicsBody){}
     func motion(){}
     func configurePhysicsBody(){}

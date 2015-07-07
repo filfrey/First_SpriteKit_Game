@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Cloudy_BG_Small.png"
+      "filename" : "shield_small.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Cloudy_BG_Large.png"
+      "filename" : "shield_Large.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Cloudy_BG_VeryLarge.png"
+      "filename" : "shield_veryLarge.png"
     }
   ],
   "info" : {

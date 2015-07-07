@@ -1,22 +1,22 @@
 //
-//  WavyEnemy.swift
+//  InvinciblePowerup.swift
 //  Not Like You
 //
-//  Created by Jeffrey Lin on 6/25/15.
+//  Created by Jeffrey Lin on 7/6/15.
 //  Copyright (c) 2015 Jeffrey Lin. All rights reserved.
 //
 
 import Foundation
 import SpriteKit
 
-class CoinSprite : Sprite, SharedAssets{
+class InvinciblePowerup : Sprite, SharedAssets{
     var newSpeed = 50
     var newYPos = CGFloat(arc4random_uniform(300)) - 150
     var newValue = Int(arc4random_uniform(10)) + 3
     var movingLeft = true
     
     convenience init(var screen : CGFloat) {
-        self.init(imageNamed : "money")
+        self.init(imageNamed : "shield")
         
         yPos = newYPos
         self.speed = 0

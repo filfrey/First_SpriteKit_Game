@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,7 +28,6 @@ class GameViewController: UIViewController {
         scene.anchorPoint = CGPoint(x: 0.5, y:0.5)
         // Changes the default origin, originally is at the bottom left side
         scene.size = skView.bounds.size // set scene size the same as the size of current container
-        
         
         skView.presentScene(scene)
 
@@ -54,4 +53,6 @@ class GameViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+
+    
 }

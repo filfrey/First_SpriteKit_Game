@@ -10,19 +10,32 @@ import Foundation
 import SpriteKit // Needed to create SKSpriteNode
 
 
-class Hero{ // Needs a initalizer in order to work
-    var guy :SKSpriteNode
-    var speed = 0.1
+class Hero : Sprite, SharedAssets{
     var emit = false
     var emitFrameCount = 0
     var maxEmitFrameCount = 30
-    var particles:SKEmitterNode
-    // Have to eventually add the creation of hero her instead of Game Scene
-    
-    
-    init(guy:SKSpriteNode, particles:SKEmitterNode){
-        self.guy = guy
-        self.particles = particles
+    convenience init(newParticles : SKEmitterNode){
+        self.init(imageNamed : "white")
+        self.configurePhysicsBody()
     }
     
+    override func configurePhysicsBody(){
+        self.physicsBody = SKPhysicsBody(circleOfRadius: 18)
+        self.physicsBody!.affectedByGravity = false
+        self.physicsBody!.categoryBitMask = ColliderType.Player
+        self.physicsBody!.collisionBitMask = ColliderType.Enemy
+        self.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
+    }
+    
+    override func remove(){
+        self.removeAllActions()
+    }
+    
+    func moveTo(newPosition : CGPoint){
+        self.position = newPosition
+    }
+    
+    static func loadSharedAssets(){
+        
+    }
 }
